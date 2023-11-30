@@ -20,12 +20,8 @@ import { IConnectionModelType } from '@/models/connection';
 
 // ----- block -----
 import Workspace from './workspace';
-import Dashboard from './dashboard';
 import Connection from './connection';
-import Team from './team';
 import Setting from '@/blocks/Setting';
-
-import { getUrlParam, updateQueryStringParameter } from '@/utils/url';
 import styles from './index.less';
 
 const navConfig: INavItem[] = [
@@ -38,28 +34,12 @@ const navConfig: INavItem[] = [
     name: i18n('workspace.title'),
   },
   {
-    key: 'dashboard',
-    icon: '\ue629',
-    iconFontSize: 24,
-    isLoad: false,
-    component: <Dashboard />,
-    name: i18n('dashboard.title'),
-  },
-  {
     key: 'connections',
     icon: '\ue622',
     iconFontSize: 20,
     isLoad: false,
     component: <Connection />,
     name: i18n('connection.title'),
-  },
-  {
-    key: 'github',
-    icon: '\ue885',
-    iconFontSize: 26,
-    isLoad: false,
-    openBrowser: 'https://github.com/chat2db/Chat2DB/',
-    name: 'Github',
   },
 ];
 
@@ -122,26 +102,6 @@ function MainPage(props: IProps) {
     const res = await getUser();
     if (res) {
       setUserInfo(res);
-      const hasTeamIcon = navConfig.find((i) => i.key === 'team');
-      if (res.admin && !hasTeamIcon) {
-        navConfig.splice(3, 0, {
-          key: 'team',
-          icon: '\ue64b',
-          iconFontSize: 24,
-          isLoad: false,
-          component: <Team />,
-          name: i18n('team.title'),
-        });
-        if (localStorage.getItem('curPage') === 'team') {
-          setActiveNav(navConfig[3]);
-        }
-      }
-      if (!res.admin && hasTeamIcon) {
-        navConfig.splice(3, 1);
-        if (localStorage.getItem('curPage') === 'team') {
-          setActiveNav(navConfig[2]);
-        }
-      }
     }
 
     const initPage = localStorage.getItem('curPage');
